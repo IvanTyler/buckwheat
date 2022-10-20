@@ -1,0 +1,51 @@
+.preloaderWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 400px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border: solid 1px #c6c6c6;
+    background-color: #555;
+    border-radius: 25px;
+
+    &__preloader {
+        width: 100%;
+        height: 30px;
+        background-color: #777;
+        border-radius: 25px;
+    }
+
+    &__progress {
+        height: 100%;
+        width: 0%;
+        background-color: #ffd66e;
+        border-radius: 25px;
+    }
+
+    &__progressActive {
+        animation: searchPrise 2s infinite;
+    }
+
+    &__precent {
+        position: absolute;
+        width: 41px;
+        left: calc(50% - 20.5px);
+        color: #fff;
+    }
+
+    @keyframes searchPrise {
+        0% {
+            background-color: #ffd66e;
+        }
+
+        50% {
+            background-color: #ffb35f;
+        }
+
+        100% {
+            background-color: #ffd66e;
+        }
+    }
+}
