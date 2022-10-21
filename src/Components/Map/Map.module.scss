@@ -6,3 +6,10 @@
     right: 0;
 }
 
+.mapWrapper {
+    position: static !important;
+
+    div:nth-child(3) {
+        display: none;
+    }
+}

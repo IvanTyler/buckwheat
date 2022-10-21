@@ -9,7 +9,7 @@ interface PreloaderProps {
 export const Preloader: React.FC<PreloaderProps> = ({ preloader, setPreloader}) => {
 
     useEffect(() => {
-        setTimeout(progressBarFunck, 50)
+        setTimeout(progressBarFunck, 20)
     }, [preloader])
 
     function progressBarFunck() {
