@@ -37,6 +37,11 @@
         transition: 0.3s;
         cursor: pointer;
 
+        @media (max-width: 650px) {
+            height: 40px;
+            width: 260px;
+        }
+
         &:hover {
             background-color: darken(#f1f1f1, 5%);
         }
@@ -50,4 +55,13 @@
     display: inline-block;
     height: 39px;
     width: 100%;
+}
+
+.substrate {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
 }

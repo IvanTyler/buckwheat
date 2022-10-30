@@ -10,15 +10,24 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { Sidebar } from '../Sidebar/Sidebar';
 import { IMarkers } from "../../Interfaces/markers"
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { IAdressMap } from '../../Interfaces/addressMap';
 
 interface IDataProps {
     reference: any;
 }
 
 export const MapContent: React.FC<IDataProps> = ({ reference }) => {
+    const dispatch = useDispatch()
 
     const [getMapCoordinates, setGetMapCoordinates] = useState<any[]>([])
+    const [getMapAddressCountry, setGetMapAddressCountry] = useState('')
+    const [getMapAddressStreet, setGetMapAddressStreet] = useState('')
+
     const [bottonAddAdress, setButtonAddAdress] = useState(true)
+    const [openSidebar, setOpenSidebar] = useState(false)
+    const [showMarkers, setShowMarkers] = useState(true)
 
     let DefaultIcon = L.icon({
         iconUrl: icon,
@@ -32,28 +41,33 @@ export const MapContent: React.FC<IDataProps> = ({ reference }) => {
             title: el.name,
             description: reference.data.descriptions[i].name,
             position: [
-                Number(`${37}` + '.0' + `${Math.floor(Math.random() * (200 - 800) + 800)}`),
-                Number(`${-95}` + '.' + `${Math.floor(Math.random() * (6000 - 6800) + 6800)}`)
+                Number(`${37}` + '.0' + `${Math.floor(Math.random() * (200 - 300) + 300)}`),
+                Number(`${-95}` + '.' + `${Math.floor(Math.random() * (6000 - 6200) + 6200)}`)
             ],
         }
     })
 
     function MyComponent() {
-        useMapEvent('click', (e) => {
-            e.latlng.lat.toFixed(4)
-            e.latlng.lng.toFixed(4)
+        useMapEvent('click', async (e) => {
+            const lat = e.latlng.lat.toFixed(4)
+            const lng = e.latlng.lng.toFixed(4)
+
+            const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+
+            setGetMapAddressCountry((prev: any) => response.data.address.country)
+            setGetMapAddressStreet((prev: any) => response.data.address.road)
+
             setGetMapCoordinates(prev => [+e.latlng.lat.toFixed(4), +e.latlng.lng.toFixed(4)])
         })
         return null
     }
 
-    const [openSidebar, setOpenSidebar] = useState(false)
-    const [showMarkers, setShowMarkers] = useState(true)
-    
-    const arr = localStorage.getItem('markers')
-    if (arr !== null) {
-        const getMarkersLocaleStorage: IMarkers[] = JSON.parse(arr || '')
-        markers = getMarkersLocaleStorage
+
+
+    const getMarkersLocaleStorage = localStorage.getItem('markers')
+    if (getMarkersLocaleStorage !== null) {
+        const getMarkersLocaleStorageParse: IMarkers[] = JSON.parse(getMarkersLocaleStorage || '')
+        markers = getMarkersLocaleStorageParse
     }
 
     const showSidebar = () => {
@@ -68,13 +82,15 @@ export const MapContent: React.FC<IDataProps> = ({ reference }) => {
                 reference={reference}
                 openSidebar={openSidebar}
                 getMapCoordinates={getMapCoordinates}
+                getMapAddressCountry={getMapAddressCountry}
+                getMapAddressStreet={getMapAddressStreet}
                 markers={markers}
                 setButtonAddAdress={setButtonAddAdress}
                 setOpenSidebar={setOpenSidebar}
                 setGetMapCoordinates={setGetMapCoordinates}
                 setShowMarkers={setShowMarkers}
             />
-            <MapContainer className={style.map} center={[37.0300, -95.6400]} zoom={13}>
+            <MapContainer className={style.map} center={[37.0250, -95.6100]} zoom={15}>
                 <MyComponent />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

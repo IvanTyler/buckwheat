@@ -5,6 +5,8 @@ interface IDataProps {
     reference: any;
     openSidebar: boolean;
     getMapCoordinates: any[];
+    getMapAddressCountry: string;
+    getMapAddressStreet: string;
     markers: any[];
     setButtonAddAdress(prev: any): void;
     setOpenSidebar(prev: any): void;
@@ -17,6 +19,8 @@ export const Sidebar: React.FC<IDataProps> = (
         reference,
         openSidebar,
         getMapCoordinates,
+        getMapAddressCountry,
+        getMapAddressStreet,
         setButtonAddAdress,
         setOpenSidebar,
         setGetMapCoordinates,
@@ -77,7 +81,7 @@ export const Sidebar: React.FC<IDataProps> = (
                 description: descriptionName,
                 position: getMapCoordinates,
             }
-            
+
             const currentCoordinates = [...markers, onPushNewMarker]
 
             setButtonAddAdress((prev: any) => prev = true)
@@ -97,7 +101,9 @@ export const Sidebar: React.FC<IDataProps> = (
                 <div className={getMapCoordinates.length ?
                     style.formAddAdress__selectedAdress + ' ' + style.adressSelected :
                     style.formAddAdress__selectedAdress}>
-                    Адресс: {getMapCoordinates.length ? 'выбран' : 'не выбран'}
+                    Адресс: {getMapCoordinates.length ?
+                        `${getMapAddressCountry}, улица: ${getMapAddressStreet}`
+                        : 'не выбран'}
                 </div>
                 <div onClick={() => showListTitles()}
                     className={
@@ -154,4 +160,8 @@ export const Sidebar: React.FC<IDataProps> = (
             </form>}
         </>
     )
+}
+
+function setSubstrate(arg0: (prev: boolean) => boolean) {
+    throw new Error('Function not implemented.');
 }
